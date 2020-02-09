@@ -13,9 +13,9 @@ public class CreateCustomerFunctionTest {
     CreateCustomerClient client;
 
     @Test
-    public void testFunction() throws Exception {
+    public void testFunction() {
     	CreateCustomer body = new CreateCustomer();
-    	body.setName("create-customer");
-        assertEquals("create-customer", client.apply(body).blockingGet().getName());
+    	body.setFirstName("create-customer");
+        assertEquals("create-customer", client.apply(body).blockingGet().getFirstName());
     }
 }
