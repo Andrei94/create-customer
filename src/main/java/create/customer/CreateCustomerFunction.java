@@ -6,23 +6,24 @@ import io.micronaut.function.FunctionBean;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.function.Function;
 
 @FunctionBean("create-customer")
-public class CreateCustomerFunction extends FunctionInitializer implements Function<CreateCustomer, Boolean> {
+public class CreateCustomerFunction extends FunctionInitializer implements Function<CreateCustomer, String> {
 	private static BraintreeGateway gateway = Application.gateway;
 
 	@Override
-	public Boolean apply(CreateCustomer customer) {
+	public String apply(CreateCustomer customer) {
+		ResourceCollection<Customer> search = gateway.customer().search(new CustomerSearchRequest().email().is(customer.getEmail()).firstName().is(customer.getFirstName()).lastName().is(customer.getLastName()).phone().is(customer.getPhone()));
+		if(search.iterator().hasNext())
+			return search.getFirst().getId();
 		Result<Customer> customerResult = gateway.customer()
 				.create(new CustomerRequest()
 						.firstName(customer.getFirstName())
 						.lastName(customer.getLastName())
 						.email(customer.getEmail())
 						.phone(customer.getPhone()));
-		return customerResult.isSuccess();
+		return customerResult.getTarget().getId();
 	}
 
 	/**
