@@ -2,7 +2,7 @@ micronaut:
   function:
     name: create-customer
   server:
-    port: 8081
+    port: 8084
     cors:
       enabled: true
       configurations:
